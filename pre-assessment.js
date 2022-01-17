@@ -10,37 +10,42 @@
 // Converting to an Angular app or typescript is not considered a necessity here.
 // We're mostly interested in understanding how engineers can critique the code & suggest improvements.
 
-var ispnum = function(num) {
-    for(var i = 2; i < num; i++)
-      if  (num % i === 0) return false;
-    return num > 1;
-};
-
-const fibonacci = (num) => {
-    if (num <= 1)return 1;
-  return fibonacci(num - 1) + fibonacci(num - 2);
-};
-
-function nxtPrmFib(number) {
-    let r = 0;
-    let l = 1;
-    while (true) {
-        var fib = fibonacci(l);
-        console.log('fib', fib, number);
-        if (fib > number) {
-            if (ispnum(fib)) {
-                r = fib;
-                break;
-                } else {
-                    l = l + 1;    
-                    console.warn('bumping to ', fib);
-                }
-            } else {
-                l = l + 1;
-                console.warn('bumping to', fib);
-            }
+const isPrime = (number) => {
+  for (let i = 2; i < number; i++) {
+    if (number % i === 0) {
+      return false;
     }
-    console.warn('Next prime fib ', r);
-}
+  }
 
-nxtPrmFib(20);
+  return true;
+};
+  
+const fibonacci = (number, cache) => {
+  cache = cache || {};
+
+  if (cache[number]) {
+    return cache[number];
+  }
+
+  if (number < 2) {
+    return number;
+  }
+
+  return cache[number] = fibonacci(number - 1, cache) + fibonacci(number - 2, cache);
+};
+  
+function nextPrimeFibonacci(number) {
+  let counter = 1;
+  
+  while (true) {
+    let fib = fibonacci(counter);
+    
+    if (fib > number && isPrime(fib)) {
+      return fib;
+    }
+
+    counter++;
+  }
+}
+  
+nextPrimeFibonacci(20);
